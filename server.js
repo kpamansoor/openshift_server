@@ -145,8 +145,8 @@ var checkForNewNews = function (forcefully,res) {
     // });
 
     console.log(feed.items[0].link);
-    console.log("from menory : " + store.get("last_news_link"));
-    console.log("from feed : " + feed.items[0].link);
+    // console.log("from menory : " + store.get("last_news_link"));
+    // console.log("from feed : " + feed.items[0].link);
     if (store.get("last_news_link") != undefined) {
       if (!forcefully) {
         if (JSON.stringify(feed.items[0].link) != store.get("last_news_link")) {
