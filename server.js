@@ -153,12 +153,12 @@ var checkForNewNews = function (forcefully,res) {
         if (JSON.stringify(feed.items[0].link) != store.get("last_news_link")) {
           store.set("last_news_link", JSON.stringify(feed.items[0].link));
           console.log("news update found------------------");
-          //sendFCM("Valanchery News",JSON.stringify(feed.items[0].title), 'news',res);
+          sendFCM("Valanchery News",JSON.stringify(feed.items[0].title), 'news',res);
         } else
           store.set("last_news_link", JSON.stringify(feed.items[0].link));
       }else{
         console.log("Forecfully sending------------------");
-        //sendFCM("Valanchery News",JSON.stringify(feed.items[0].title), 'news',res);
+        sendFCM("Valanchery News",JSON.stringify(feed.items[0].title), 'news',res);
       }
     }
   })();
