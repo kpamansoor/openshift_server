@@ -6,9 +6,10 @@ var express = require('express'),
   CronJob = require('cron').CronJob;
 let Parser = require('rss-parser');
 let parser = new Parser();
-var store = require('data-store')('my-app');
 require('log-timestamp');
 var fs = require('fs');
+var link_file_name = 'link.txt';
+var vly_news_topic = 'news';
 
 var serverKey = 'AAAABALux8I:APA91bHyPZclYU-lvSwWwnTPW-bXmYavgp1lp_bTpWZdqmmX_W_3rVU1lk8QtzNpqC9ozO2psixGcGFIjVaEOXHS9AR-O16UfHIPozWyn-u9OBGde04B3dYvgtWNyd4b6-0oaVCFah7l';
 var fcm = new FCM(serverKey);
@@ -146,37 +147,39 @@ var checkForNewNews = function (forcefully,res) {
     //   console.log(item.title + ':' + item.link)
     // });
 
-    console.log(feed.items[0].link);
-    // console.log("from menory : " + store.get("last_news_link"));
-    // console.log("from feed : " + feed.items[0].link);
-    var data = "https://www.valanchery.in/gail-pipeline-causes-the-pangad-canal-to-be-shutdown-that-might-cause-a-flood-in-valanchery/";
-
-    fs.writeFile('temp.txt', data, function(err, data){
-      fs.readFile('temp.txt', 'utf-8' ,function(err, buf) {
-        console.log(buf.toString());
-      });
-    });
-   
-    if (store.get("last_news_link") != undefined) {
-      if (!forcefully) {
-        if (JSON.stringify(feed.items[0].link) != store.get("last_news_link")) {
-          store.set("last_news_link", JSON.stringify(feed.items[0].link));
-          console.log("news update found------------------");
-          // sendFCM("Valanchery News",JSON.stringify(feed.items[0].title), 'news',res);
-        } else
-          store.set("last_news_link", JSON.stringify(feed.items[0].link));
-      }else{
-        console.log("Forecfully sending------------------");
-        // sendFCM("Valanchery News",JSON.stringify(feed.items[0].title), 'news',res);
+    // console.log("new data :"+feed.items[0].link);   
+    
+    fs.readFile(link_file_name, 'utf-8' ,function(err, buf) {
+      var file_data = buf.toString();
+      var data = JSON.stringify(feed.items[0].link);
+      // console.log("file data :"+file_data);
+      if (file_data != undefined) {
+        if (!forcefully) {
+          if (JSON.stringify(feed.items[0].link) != file_data) {
+            
+            console.log("news update found------------------");
+            
+            fs.writeFile(link_file_name, data, function(err, data){
+            sendFCM("Valanchery News",JSON.stringify(feed.items[0].title), res);
+            });
+            
+          } 
+          else
+            fs.writeFile(link_file_name, data, function(err, data){});
+        }else{
+          console.log("Forecfully sending------------------");
+          fs.writeFile(link_file_name, data, function(err, data){});
+          sendFCM("Valanchery News",JSON.stringify(feed.items[0].title), res);
+        }
       }
-    }
+    });    
   })();
 }
 
-var sendFCM = function (ttl, msg, topic,res) {
+var sendFCM = function (ttl, msg, res) {
 
   var message = {
-    to: '/topics/' + topic, // required fill with device token or topics
+    to: '/topics/' + vly_news_topic, // required fill with device token or topics
     collapse_key: 'test', //your_collapse_key 
     data: {
       your_custom_data_key: 'your_custom_data_value'
@@ -190,12 +193,14 @@ var sendFCM = function (ttl, msg, topic,res) {
   fcm.send(message)
     .then(function (response) {
       console.log("Successfully sent with response: ", response);
-      res.send(response);
+      if(res != undefined)
+          res.send(response);
     })
     .catch(function (err) {
       console.log("Something has gone wrong!");
       console.error(err);
-      res.send(err);
+      if(res != undefined)
+          res.send(err);
     })
 }
 
