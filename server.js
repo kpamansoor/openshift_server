@@ -8,6 +8,7 @@ let Parser = require('rss-parser');
 let parser = new Parser();
 var store = require('data-store')('my-app');
 require('log-timestamp');
+var fs = require('fs');
 
 var serverKey = 'AAAABALux8I:APA91bHyPZclYU-lvSwWwnTPW-bXmYavgp1lp_bTpWZdqmmX_W_3rVU1lk8QtzNpqC9ozO2psixGcGFIjVaEOXHS9AR-O16UfHIPozWyn-u9OBGde04B3dYvgtWNyd4b6-0oaVCFah7l';
 var fcm = new FCM(serverKey);
@@ -148,17 +149,25 @@ var checkForNewNews = function (forcefully,res) {
     console.log(feed.items[0].link);
     // console.log("from menory : " + store.get("last_news_link"));
     // console.log("from feed : " + feed.items[0].link);
+    var data = "https://www.valanchery.in/gail-pipeline-causes-the-pangad-canal-to-be-shutdown-that-might-cause-a-flood-in-valanchery/";
+
+    fs.writeFile('temp.txt', data, function(err, data){
+      fs.readFile('temp.txt', 'utf-8' ,function(err, buf) {
+        console.log(buf.toString());
+      });
+    });
+   
     if (store.get("last_news_link") != undefined) {
       if (!forcefully) {
         if (JSON.stringify(feed.items[0].link) != store.get("last_news_link")) {
           store.set("last_news_link", JSON.stringify(feed.items[0].link));
           console.log("news update found------------------");
-          sendFCM("Valanchery News",JSON.stringify(feed.items[0].title), 'news',res);
+          // sendFCM("Valanchery News",JSON.stringify(feed.items[0].title), 'news',res);
         } else
           store.set("last_news_link", JSON.stringify(feed.items[0].link));
       }else{
         console.log("Forecfully sending------------------");
-        sendFCM("Valanchery News",JSON.stringify(feed.items[0].title), 'news',res);
+        // sendFCM("Valanchery News",JSON.stringify(feed.items[0].title), 'news',res);
       }
     }
   })();
