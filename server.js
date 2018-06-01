@@ -9,7 +9,7 @@ let parser = new Parser();
 require('log-timestamp');
 var fs = require('fs');
 var link_file_name = 'link.txt';
-var vly_news_topic = 'news';
+var vly_news_topic = 'newsa';
 
 var serverKey = 'AAAABALux8I:APA91bHyPZclYU-lvSwWwnTPW-bXmYavgp1lp_bTpWZdqmmX_W_3rVU1lk8QtzNpqC9ozO2psixGcGFIjVaEOXHS9AR-O16UfHIPozWyn-u9OBGde04B3dYvgtWNyd4b6-0oaVCFah7l';
 var fcm = new FCM(serverKey);
@@ -17,6 +17,7 @@ Object.assign = require('object-assign')
 
 app.engine('html', require('ejs').renderFile);
 app.use(morgan('combined'))
+app.use("/", express.static(__dirname + '/client'));
 
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
   ip = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0',
@@ -121,6 +122,11 @@ app.get('/vly_broadcast_forced', function (req, res) {
 
 });
 
+app.get('/sendNotification', function (req, res) {
+  console.log("Sending broadcast from web panel..........");
+  sendFCM(req.query.title,req.query.title, res);
+
+});
 
 // CronJob for fetching news and sending FCM
 

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- <link rel="stylesheet" href="/templates/index.css"> -->
+    <link rel="stylesheet" type="text/css" href="styles/index.css"> 
+    <link rel="stylesheet" href="styles/style.css">   
+    <script type="text/javascript" src="js/angular.min.js"></script>
+    <script type="text/javascript" src="js/angular-route.js"></script>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="app.js"></script>
+    <script type="text/javascript" src="config.js"></script>
+</head>
+
+<body ng-app="server" ng-controller="senderController">
+
+  <div class="wrapper">
+    <div class="container">
+      <h1>Broadcast Panel</h1>
+      
+      <form class="form">
+        <input type="text" disabled="disabled" placeholder="App: Valanchery News">
+        <input ng-model="title" id="title" type="text" placeholder="Enter title" title="Notification title" maxlength="200">
+        <textarea  ng-model="message" id="message" placeholder="Enter message" title="Notification message" maxlength="1000"></textarea>
+      </select>
+        <button type="submit" id="login-button" ng-click="sendNotification();">{{buttonText}}</button>
+        <div ng-if="response.length > 0">{{response}}</div>
+      </form>
+    </div>
+    
+    <ul class="bg-bubbles">
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+    </ul>
+  </div>
+</body>
+
+</html>
