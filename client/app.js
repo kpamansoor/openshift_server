@@ -10,7 +10,7 @@ var app = angular.module('server', ['ngRoute']);
 //         });
 // });
 
-app.controller('senderController', function ($scope, $rootScope, $http, Config) {
+app.controller('senderController', function ($scope, $rootScope, $http, Config,$timeout) {
 
     $scope.loading = false;
     $scope.title = "";
@@ -34,6 +34,11 @@ app.controller('senderController', function ($scope, $rootScope, $http, Config) 
                     $scope.message = "";
                     $scope.buttonText = "Succesfully send!"
                     $scope.response = JSON.stringify(data);
+                    $timeout( function(){
+                        $scope.buttonText ="Send Now";
+                        $scope.response ="";
+                    }, 3000 );
+                   
                 })
                 .error(function (data, status, header, config) {
 
@@ -50,7 +55,7 @@ app.controller('senderController', function ($scope, $rootScope, $http, Config) 
             document.getElementById('title').style.borderColor = "red";
             valid = valid && false;
         } else
-            document.getElementById('title').style.borderColor = "green";
+            document.getElementById('title').style.borderColor = "rgba(255, 255, 255, 0.4)";
 
 
 
@@ -58,7 +63,7 @@ app.controller('senderController', function ($scope, $rootScope, $http, Config) 
             document.getElementById('message').style.borderColor = "red";
             valid = valid && false;
         } else
-            document.getElementById('message').style.borderColor = "green";
+            document.getElementById('message').style.borderColor = "rgba(255, 255, 255, 0.4)";
 
         return valid;
     }
