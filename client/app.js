@@ -19,30 +19,38 @@ app.controller('senderController', function ($scope, $rootScope, $http, Config,$
     $scope.response ="";
 
     $scope.sendNotification = function () {
+        
         if (validate()) {
-            $scope.loading = true;
-            $scope.buttonText = "Sending...";
-            var params = 'title='+$scope.title+
-                            '&message='+$scope.message;            
-
-            var config = {
-                headers: {}
+            var txt;
+            var r = confirm("Confirm to broadcast!");
+            if (r == true) {
+                $scope.loading = true;
+                $scope.buttonText = "Sending...";
+                var params = 'title='+$scope.title+
+                                '&message='+$scope.message;            
+    
+                var config = {
+                    headers: {}
+                }
+                $http.get(Config.server_url + 'sendNotification?'+params, config)
+                    .success(function (data, status, headers, config) {
+                        $scope.title = "";
+                        $scope.message = "";
+                        $scope.buttonText = "Succesfully send!"
+                        $scope.response = JSON.stringify(data);
+                        $timeout( function(){
+                            $scope.buttonText ="Send Now";
+                            $scope.response ="";
+                        }, 3000 );
+                       
+                    })
+                    .error(function (data, status, header, config) {
+    
+                    });
+            } else {
+                // txt = "You pressed Cancel!";
             }
-            $http.get(Config.server_url + 'sendNotification?'+params, config)
-                .success(function (data, status, headers, config) {
-                    $scope.title = "";
-                    $scope.message = "";
-                    $scope.buttonText = "Succesfully send!"
-                    $scope.response = JSON.stringify(data);
-                    $timeout( function(){
-                        $scope.buttonText ="Send Now";
-                        $scope.response ="";
-                    }, 3000 );
-                   
-                })
-                .error(function (data, status, header, config) {
-
-                });
+           
         }
 
     }

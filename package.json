@@ -4,6 +4,7 @@
   "description": "Node.js app for OpenShift 3",
   "main": "server.js",
   "dependencies": {
+    "basic-auth": "^2.0.0",
     "chai": "^3.5.0",
     "chai-http": "^2.0.1",
     "cron": "^1.3.0",
