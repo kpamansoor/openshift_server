@@ -9,7 +9,7 @@ let parser = new Parser();
 require('log-timestamp');
 var fs = require('fs');
 var link_file_name = 'link.txt';
-var vly_news_topic = 'news';
+var vly_news_topic = 'newsa';
 
 const auth = require('./authentication');
 app.use(auth);
@@ -20,7 +20,18 @@ Object.assign = require('object-assign')
 app.engine('html', require('ejs').renderFile);
 app.use(morgan('combined'))
 app.use("/", express.static(__dirname + '/client'));
-
+app.use(function (request, response, next) {
+  //console.log("hit------------------- " + request);
+  response.header("Access-Control-Allow-Origin", "*");
+  response.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  response.header("Access-Control-Allow-Headers", "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept");
+  //Access-Control-Allow-Origin: http://api.bob.com
+  response.header('Access-Control-Allow-Credentials', true);
+  response.header('Access-Control-Max-Age', '86400');
+  //response.sendFile(__dirname + '/client/index.html');
+  //response.redirect('/index.html');
+  next();
+});
 
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
   ip = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0',
