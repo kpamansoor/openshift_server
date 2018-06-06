@@ -9,7 +9,7 @@ let parser = new Parser();
 require('log-timestamp');
 var fs = require('fs');
 var link_file_name = 'link.txt';
-var vly_news_topic = 'newsa';
+var vly_news_topic = 'news';
 
 const auth = require('./authentication');
 app.use(auth);
