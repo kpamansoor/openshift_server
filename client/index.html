@@ -20,8 +20,8 @@
       
       <form class="form">
         <input type="text" disabled="disabled" placeholder="App: Valanchery News">
-        <input ng-model="title" id="title" type="text" placeholder="Enter title" title="Notification title" maxlength="200">
-        <textarea  ng-model="message" id="message" placeholder="Enter message" title="Notification message" maxlength="1000"></textarea>
+        <input ng-model="title" id="title" type="text" placeholder="Enter title" autocomplete="off" title="Notification title" maxlength="200">
+        <textarea  ng-model="message" id="message" placeholder="Enter message" autocomplete="off" title="Notification message" maxlength="1000"></textarea>
       </select>
         <button type="submit" id="login-button" ng-click="sendNotification();">{{buttonText}}</button>
         <div ng-if="response.length > 0">{{response}}</div>
