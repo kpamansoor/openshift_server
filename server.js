@@ -235,15 +235,15 @@ initDb(function (err) {
   console.log('Error connecting to Mongo. Message:\n' + err);
 });
 
-// app.listen(port, ip);
-// console.log('Server running on http://%s:%s', ip, port);
-var options = {
-  key: fs.readFileSync(__dirname + '/ssl_cert/private-key.pem'),
-  cert: fs.readFileSync(__dirname + '/ssl_cert/public-cert.pem')
-};
+app.listen(port, ip);
+console.log('Server running on http://%s:%s', ip, port);
+// var options = {
+//   key: fs.readFileSync(__dirname + '/ssl_cert/private-key.pem'),
+//   cert: fs.readFileSync(__dirname + '/ssl_cert/public-cert.pem')
+// };
 
-https.createServer(options, app).listen(443, function () {
-  console.log("Server started at port 443");
-});
+// https.createServer(options, app).listen(443, function () {
+//   console.log("Server started at port 443");
+// });
 
 module.exports = app;
