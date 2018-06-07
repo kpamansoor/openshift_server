@@ -10,7 +10,7 @@ require('log-timestamp');
 var https = require('https');
 var fs = require('fs');
 var link_file_name = 'link.txt';
-var vly_news_topic = 'newsa';
+var vly_news_topic = 'news';
 
 const auth = require('./authentication');
 app.use(auth);
@@ -20,7 +20,7 @@ Object.assign = require('object-assign')
 
 app.engine('html', require('ejs').renderFile);
 app.use(morgan('combined'))
-app.use("/vly", express.static(__dirname + '/client'));
+app.use("/vly", express.static(__dirname + '/client_vly'));
 app.use(function (request, response, next) {
   //console.log("hit------------------- " + request);
   response.header("Access-Control-Allow-Origin", "*");
@@ -126,18 +126,18 @@ app.get('/pagecount', function (req, res) {
   }
 });
 
-app.get('/vly_broadcast', function (req, res) {
+app.get('/vly/vly_broadcast', function (req, res) {
 
   checkForNewNews(false);
 
 });
-app.get('/vly_broadcast_forced', function (req, res) {
+app.get('/vly/vly_broadcast_forced', function (req, res) {
 
   checkForNewNews(true,res);
 
 });
 
-app.get('/sendNotification', function (req, res) {
+app.get('/vly/sendNotification', function (req, res) {
   console.log("Sending broadcast from web panel..........");
   sendFCM(req.query.title,req.query.title, res);
 
