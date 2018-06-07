@@ -7,9 +7,10 @@ var express = require('express'),
 let Parser = require('rss-parser');
 let parser = new Parser();
 require('log-timestamp');
+var https = require('https');
 var fs = require('fs');
 var link_file_name = 'link.txt';
-var vly_news_topic = 'news';
+var vly_news_topic = 'newsa';
 
 const auth = require('./authentication');
 app.use(auth);
@@ -19,7 +20,7 @@ Object.assign = require('object-assign')
 
 app.engine('html', require('ejs').renderFile);
 app.use(morgan('combined'))
-app.use("/", express.static(__dirname + '/client'));
+app.use("/vly", express.static(__dirname + '/client'));
 app.use(function (request, response, next) {
   //console.log("hit------------------- " + request);
   response.header("Access-Control-Allow-Origin", "*");
@@ -234,7 +235,15 @@ initDb(function (err) {
   console.log('Error connecting to Mongo. Message:\n' + err);
 });
 
-app.listen(port, ip);
-console.log('Server running on http://%s:%s', ip, port);
+// app.listen(port, ip);
+// console.log('Server running on http://%s:%s', ip, port);
+var options = {
+  key: fs.readFileSync(__dirname + '/ssl_cert/private-key.pem'),
+  cert: fs.readFileSync(__dirname + '/ssl_cert/public-cert.pem')
+};
+
+https.createServer(options, app).listen(443, function () {
+  console.log("Server started at port 443");
+});
 
 module.exports = app;
