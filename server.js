@@ -10,7 +10,8 @@ require('log-timestamp');
 var https = require('https');
 var fs = require('fs');
 var link_file_name = 'link.txt';
-var vly_news_topic = 'news';
+// var vly_news_topic = 'news';
+var vly_news_topic = 'test';
 
 const auth = require('./authentication');
 app.use(auth);
@@ -139,7 +140,7 @@ app.get('/vly/vly_broadcast_forced', function (req, res) {
 
 app.get('/vly/sendNotification', function (req, res) {
   console.log("Sending broadcast from web panel..........");
-  sendFCM(req.query.title,req.query.title, res);
+  sendFCM(req.query.title,req.query.message,"notification", res);
 
 });
 
@@ -181,7 +182,7 @@ var checkForNewNews = function (forcefully,res) {
             console.log("news update found------------------");
             
             fs.writeFile(link_file_name, data, function(err, data){
-            sendFCM("Valanchery News",JSON.stringify(feed.items[0].title), res);
+            sendFCM("News update",JSON.stringify(feed.items[0].title).replace('"',''),"news", res);
             });
             
           } 
@@ -190,25 +191,27 @@ var checkForNewNews = function (forcefully,res) {
         }else{
           console.log("Forecfully sending------------------");
           fs.writeFile(link_file_name, data, function(err, data){});
-          sendFCM("Valanchery News",JSON.stringify(feed.items[0].title), res);
+          sendFCM("News update",JSON.stringify(feed.items[0].title).replace('"',''),"news", res);
         }
       }
     });    
   })();
 }
 
-var sendFCM = function (ttl, msg, res) {
+var sendFCM = function (ttl, msg,typ, res) {
 
   var message = {
     to: '/topics/' + vly_news_topic, // required fill with device token or topics
     collapse_key: 'test', //your_collapse_key 
     data: {
-      your_custom_data_key: 'your_custom_data_value'
-    },
-    notification: {
       title: ttl,
-      body: msg
-    }
+      message: msg,
+      type: typ
+    },
+    // notification: {
+    //   title: ttl,
+    //   // body: msg
+    // }
   };
 
   fcm.send(message)
