@@ -10,8 +10,8 @@ require('log-timestamp');
 var https = require('https');
 var fs = require('fs');
 var link_file_name = 'link.txt';
-// var vly_news_topic = 'news';
-var vly_news_topic = 'test';
+var vly_news_topic = 'news';
+// var vly_news_topic = 'test';
 
 const auth = require('./authentication');
 app.use(auth);
